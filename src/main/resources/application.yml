@@ -1,3 +1,22 @@
 spring:
   application:
     name: payments-service
+
+payments:
+  shards:
+    datasource:
+      first:
+        driverClassName: org.postgresql.Driver
+        jdbcUrl: ${PAYMENTS_SHARD_01_URL:jdbc:postgresql://localhost:5432/payments1}
+        username: ${PAYMENTS_SHARD_01_USERNAME:postgres}
+        password: ${PAYMENTS_SHARD_01_PASSWORD:кщще}
+      second:
+        driverClassName: org.postgresql.Driver
+        url: ${PAYMENTS_SHARD_02_URL:jdbc:postgresql://localhost:5432/payments2}
+        username: ${PAYMENTS_SHARD_02_USERNAME:postgres}
+        password: ${PAYMENTS_SHARD_02_PASSWORD:кщще}
+      third:
+        driverClassName: org.postgresql.Driver
+        url: ${PAYMENTS_SHARD_03_URL:jdbc:postgresql://localhost:5432/payments3}
+        username: ${PAYMENTS_SHARD_03_USERNAME:postgres}
+        password: ${PAYMENTS_SHARD_03_PASSWORD:кщще}
