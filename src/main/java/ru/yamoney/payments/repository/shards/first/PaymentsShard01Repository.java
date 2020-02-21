@@ -1,6 +1,7 @@
-package ru.yamoney.payments.repository;
+package ru.yamoney.payments.repository.shards.first;
 
 import org.springframework.stereotype.Repository;
+import ru.yamoney.payments.repository.PaymentRepository;
 
 /**
  * The payment repository for first shard.

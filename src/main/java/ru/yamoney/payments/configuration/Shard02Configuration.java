@@ -7,7 +7,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -24,19 +23,20 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "ru.yamoney.payments.repository.shards.first"
+        basePackages = "ru.yamoney.payments.repository.shards.second",
+        entityManagerFactoryRef = "shard02EntityManagerFactory",
+        transactionManagerRef = "shard02JpaTransactionManager"
 )
-public class Shard01Configuration {
+public class Shard02Configuration {
 
 
     /**
      * Configures datasource for the first shard.
      * @return configured datasource
      */
-    @Primary
-    @Bean("shard01DataSource")
-    @ConfigurationProperties(prefix = "payments.shards.datasource.first")
-    public DataSource dataSource() {
+    @Bean
+    @ConfigurationProperties(prefix = "payments.shards.datasource.second")
+    public DataSource shard02DataSource() {
         return DataSourceBuilder
                 .create()
                 .build();
@@ -45,19 +45,18 @@ public class Shard01Configuration {
     /**
      * Configures entity manager factory for the first shard.
      * @param builder builder for creating entity manager factory
-     * @param dataSource configured datasource
+     * @param dataSource configured datasource for the second shard
      *
      * @return configured entity manager factory
      */
     @Bean
-    @Primary
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+    public LocalContainerEntityManagerFactoryBean shard02EntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("shard01DataSource") DataSource dataSource) {
+            @Qualifier("shard02DataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
                 .packages("ru.yamoney.payments.model.domain")
-                .persistenceUnit("shard01")
+                .persistenceUnit("shard02")
                 .build();
     }
 
@@ -67,23 +66,21 @@ public class Shard01Configuration {
      * @return configured JPA transaction manager
      */
     @Bean
-    @Primary
-    public JpaTransactionManager transactionManager(
-            @Qualifier("entityManagerFactory") EntityManagerFactory emf) {
+    public JpaTransactionManager shard02JpaTransactionManager(
+            @Qualifier("shard02EntityManagerFactory") EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
 
     /**
      * Configure Flyway for the first shard.
-     * @param dataSource configured datasource
+     * @param dataSource configured datasource for the second shard
      * @return configured flyway
      */
-    @Primary
-    @Bean(name = "shard01Flyway", initMethod = "migrate")
-    public Flyway flyway(@Qualifier("shard01DataSource") DataSource dataSource) {
+    @Bean(name = "shard02Flyway", initMethod = "migrate")
+    public Flyway flyway(@Qualifier("shard02DataSource") DataSource dataSource) {
         return Flyway.configure()
                 .dataSource(dataSource)
-                .locations("/db/migration/payments01")
+                .locations("/db/migration/payments02")
                 .load();
     }
 
