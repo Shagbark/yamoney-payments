@@ -20,6 +20,7 @@ ext {
     junit_version = '5.3.1'
     mockito_version = '2.27.0'
     lombok_version = '1.18.10'
+    modelmapper_version = '2.3.5'
 }
 
 configurations {
@@ -31,10 +32,12 @@ configurations {
 dependencies {
     // starters 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation 'org.flywaydb:flyway-core'
     runtimeOnly 'org.postgresql:postgresql'
+    implementation "org.modelmapper:modelmapper:$modelmapper_version"
 
     compileOnly "org.projectlombok:lombok:$lombok_version"
     annotationProcessor "org.projectlombok:lombok:$lombok_version"
