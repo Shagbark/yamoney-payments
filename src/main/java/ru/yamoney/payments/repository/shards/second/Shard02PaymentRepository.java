@@ -9,5 +9,5 @@ import ru.yamoney.payments.repository.PaymentRepository;
  * @author Protsko Dmitry
  */
 @Repository
-public interface PaymentsShard02Repository extends PaymentRepository {
+public interface Shard02PaymentRepository extends PaymentRepository {
 }
