@@ -21,6 +21,7 @@ ext {
     mockito_version = '2.27.0'
     lombok_version = '1.18.10'
     modelmapper_version = '2.3.5'
+    springfox_swagger_version = '2.9.2'
 }
 
 configurations {
@@ -41,6 +42,9 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:$lombok_version"
     annotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+    implementation "io.springfox:springfox-swagger2:$springfox_swagger_version"
+    implementation "io.springfox:springfox-swagger-ui:$springfox_swagger_version"
 
     // test frameworks and libs
     testImplementation ('org.springframework.boot:spring-boot-starter-test') {
